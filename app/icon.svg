@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">BNS Works Contracts</title>
+  <rect width="64" height="64" rx="14" fill="#0b223c"/>
+  <path d="M13 48V26l12-8v30M29 48V12l12-7v43M45 48V23l8 5v20" fill="none" stroke="#f58200" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M20 30h1M20 36h1M20 42h1M35 20h2M35 27h2M35 34h2M49 33v10" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M10 51h44" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</svg>
