@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js production and development output
+.next/
+out/
+dist/
+
+# Local environment variables — never commit real credentials
+.env*
+!.env.example
+
+# Logs and diagnostic files
+*.log
+logs/
+*.tsbuildinfo
+
+# Hosting and operating-system files
+.vercel/
+.DS_Store
+Thumbs.db
