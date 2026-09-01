@@ -21,6 +21,10 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v6
 
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -38,7 +42,7 @@ jobs:
       - name: Build the static website
         run: pnpm build
         env:
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload the website
         uses: actions/upload-pages-artifact@v4
