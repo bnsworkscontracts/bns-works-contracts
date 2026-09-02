@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useEffect, useState } from 'react'
 import { capabilityPillars, company, scaleFacts } from './data/company'
@@ -70,11 +69,15 @@ function useReveal() {
 }
 
 function AppLink({ to, children, className = '', onClick, ariaLabel }: { to: string; children: ReactNode; className?: string; onClick?: () => void; ariaLabel?: string }) {
-  return <Link href={to} className={className} onClick={onClick} aria-label={ariaLabel}>{children}</Link>
+  return <a href={to} className={className} onClick={onClick} aria-label={ariaLabel}>{children}</a>
 }
 
 const navItems = [
-  ['Home', '/'], ['About', '/about'], ['Services', '/services'], ['Capabilities', '/capabilities'], ['Contact', '/contact'],
+  ['Home', '/'], ['Contact', '/contact'],
+]
+
+const footerItems = [
+  ['About', '/#about'], ['Services', '/#services'], ['Capabilities', '/#capabilities'], ['Contact', '/contact'],
 ]
 
 function Header() {
@@ -92,7 +95,8 @@ function Header() {
     return () => window.removeEventListener('keydown', close)
   }, [open])
   const pathname = usePathname()
-  const path = pathname.startsWith(publicBasePath) ? pathname.slice(publicBasePath.length) || '/' : pathname
+  const rawPath = pathname.startsWith(publicBasePath) ? pathname.slice(publicBasePath.length) || '/' : pathname
+  const path = rawPath.replace(/\/+$/, '') || '/'
   return <header className={`site-header ${scrolled || path !== '/' ? 'is-solid' : ''}`}>
     <div className="shell header-inner">
       <AppLink to="/" className="brand" onClick={() => setOpen(false)} ariaLabel="BNS Works home">
@@ -118,7 +122,7 @@ function Footer() {
     <footer className="footer">
       <div className="shell footer-top">
         <div><img className="footer-logo" src={publicAsset('/images/brand/bns-logo.png')} alt="BNS Works Contracts Private Limited" /><p>General construction, civil works and infrastructure execution across Punjab.</p></div>
-        <div className="footer-nav"><span className="eyebrow">Explore</span>{navItems.slice(1).map(([label, to]) => <AppLink key={to} to={to}>{label}</AppLink>)}</div>
+        <div className="footer-nav"><span className="eyebrow">Explore</span>{footerItems.map(([label, to]) => <AppLink key={to} to={to}>{label}</AppLink>)}</div>
         <div className="footer-contact"><span className="eyebrow">Contact</span><p>{company.location}</p><a href={`tel:+91${company.phone}`}>{company.phoneDisplay}</a><a href={`mailto:${company.email}`}>{company.email}</a></div>
       </div>
       <div className="shell footer-base"><span>© {new Date().getFullYear()} BNS Works Contracts Private Limited</span><span>Punjab · Chandigarh · Mohali</span></div>
@@ -133,8 +137,8 @@ function Eyebrow({ children }: { children: ReactNode }) { return <p className="e
 function Button({ to, children, variant = 'primary' }: { to: string; children: ReactNode; variant?: 'primary' | 'ghost' }) { return <AppLink to={to} className={`button button--${variant}`}>{children}<Icon name="arrow" size={17} /></AppLink> }
 
 function Hero() {
-  return <section className="hero"><img className="hero-image" src={publicAsset('/images/general/bns-hero-construction.png')} alt="AI-generated visual of a completed and in-progress construction development"/><div className="hero-shade"></div><span className="image-disclaimer image-disclaimer--hero">AI-generated visual</span><div className="shell hero-content">
-    <div className="hero-copy"><Eyebrow>General construction company · Punjab, India</Eyebrow><h1>Building infrastructure.<br/><em>Delivering what matters.</em></h1><p>Construction, civil works and infrastructure execution for Punjab, Chandigarh and Mohali.</p><div className="hero-actions"><Button to="/capabilities">View our capabilities</Button><Button to="/contact" variant="ghost">Discuss your project</Button></div></div>
+  return <section className="hero"><img className="hero-image" src={publicAsset('/images/general/bns-hero-construction.png')} alt="Construction and infrastructure development"/><div className="hero-shade"></div><div className="shell hero-content">
+    <div className="hero-copy"><Eyebrow>General construction company · Punjab, India</Eyebrow><h1>Building infrastructure.<br/><em>Delivering what matters.</em></h1><p>Construction, civil works and infrastructure execution for Punjab, Chandigarh and Mohali.</p><div className="hero-actions"><Button to="/#capabilities">View our capabilities</Button><Button to="/contact" variant="ghost">Discuss your project</Button></div></div>
     <div className="hero-side"><span>01 / 01</span><span>Built for real-world work</span></div>
   </div><div className="hero-bottom shell"><span className="scroll-marker"><i></i>Scroll to explore</span><span>General Construction · Civil Works · Infrastructure</span></div></section>
 }
@@ -152,23 +156,49 @@ const coreExpertise = [
   ['building', 'Civil Infrastructure & Real Estate Development', 'Comprehensive civil engineering services supporting large-scale commercial and residential real estate projects. From initial site preparation and foundational groundworks to structural completion, we build environments that last.'],
 ] as const
 
-function OverviewSection() { return <section className="section overview"><div className="shell overview-grid"><div className="overview-visual" data-reveal><img src={publicAsset('/images/general/bns-hero-construction.png')} alt="AI-generated visual of a small constructed building development"/><span className="image-disclaimer">AI-generated visual</span><div className="visual-caption"><span>Construction capability</span><span>01 — 04</span></div></div><div className="overview-copy" data-reveal><Eyebrow>About BNS</Eyebrow><h2>Built for the work<br/>that <em>matters.</em></h2><p>BNS Works Contracts Private Limited is a general construction company supporting civil construction, infrastructure development, building construction, road works, engineering, maintenance and private civil works.</p><p>With a 150+ employee workforce and operational reach across Punjab, Chandigarh and Mohali, BNS is structured for practical on-ground delivery.</p><Button to="/about" variant="ghost">About BNS Works</Button></div></div></section> }
+function OverviewSection() { return <section className="section overview" id="about"><div className="shell overview-grid"><div className="overview-visual" data-reveal><img src={publicAsset('/images/general/bns-hero-construction.png')} alt="Construction capability and building development"/><div className="visual-caption"><span>Construction capability</span><span>01 — 04</span></div></div><div className="overview-copy" data-reveal><Eyebrow>About BNS</Eyebrow><h2>Built for the work<br/>that <em>matters.</em></h2><p>BNS Works Contracts Private Limited brings together general construction, civil construction, building construction and infrastructure development in one focused execution offering.</p><p>Our work spans roads and highways, government contracting and tenders, engineering and transportation, maintenance and repair, and private civil works. With a 150+ employee workforce and operational reach across Punjab, Chandigarh and Mohali, BNS is structured for practical on-ground delivery.</p><Button to="/#services" variant="ghost">Explore our services</Button></div></div></section> }
 
-function CoreExpertise() { return <section className="section core-expertise"><div className="shell"><SectionHeading eyebrow="Core capabilities" title={<>Our Core Areas<br/>of <em>Expertise.</em></>} copy="BNS delivers high-quality civil engineering, infrastructure, and real estate development solutions. We partner with public and private sectors to execute complex projects with precision, from foundational groundworks to completed road networks." action={<Button to="/capabilities" variant="ghost">View our capabilities</Button>}/><div className="expertise-grid">{coreExpertise.map(([icon, title, copy], index) => <article className="expertise-card" data-reveal style={{ transitionDelay: `${index * 70}ms` }} key={title}><span className="expertise-card__icon"><Icon name={icon} size={25}/></span><span className="expertise-card__number">0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section> }
+function CoreExpertise() { return <section className="section core-expertise"><div className="shell"><SectionHeading eyebrow="Core capabilities" title={<>Our Core Areas<br/>of <em>Expertise.</em></>} copy="BNS delivers high-quality civil engineering, infrastructure, and real estate development solutions. We partner with public and private sectors to execute complex projects with precision, from foundational groundworks to completed road networks."/><div className="expertise-grid">{coreExpertise.map(([icon, title, copy], index) => <article className="expertise-card" data-reveal style={{ transitionDelay: `${index * 70}ms` }} key={title}><span className="expertise-card__icon"><Icon name={icon} size={25}/></span><span className="expertise-card__number">0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section> }
 
-function GovernmentSection() { return <section className="government"><div className="shell government-grid"><div className="government-copy" data-reveal><Eyebrow>Government & infrastructure</Eyebrow><h2>Experience where<br/>infrastructure <em>matters.</em></h2><p>Experience across PWD projects, village roads and intercity roads informs our approach to construction and civil infrastructure work.</p><ul><li><Icon name="check" size={17}/>PWD project experience</li><li><Icon name="check" size={17}/>Village and intercity road works</li><li><Icon name="check" size={17}/>Government contracting support</li></ul><Button to="/capabilities">View capabilities</Button></div><div className="government-visual" data-reveal><img src={publicAsset('/images/general/road-infrastructure-execution.png')} alt="AI-generated visual of road infrastructure work in Punjab"/><span className="image-disclaimer">AI-generated visual</span><div className="visual-data"><span>Infrastructure execution</span><b>PW<span>D</span></b><small>Experience</small></div></div></div></section> }
+function GovernmentSection() { return <section className="government"><div className="shell government-grid"><div className="government-copy" data-reveal><Eyebrow>Government & infrastructure</Eyebrow><h2>Experience where<br/>infrastructure <em>matters.</em></h2><p>Experience across PWD projects, village roads and intercity roads informs our approach to construction and civil infrastructure work.</p><ul><li><Icon name="check" size={17}/>PWD project experience</li><li><Icon name="check" size={17}/>Village and intercity road works</li><li><Icon name="check" size={17}/>Government contracting support</li></ul><Button to="/#capabilities">View capabilities</Button></div><div className="government-visual" data-reveal><img src={publicAsset('/images/general/road-infrastructure-execution.png')} alt="Road infrastructure work in Punjab"/><div className="visual-data"><span>Infrastructure execution</span><b>PW<span>D</span></b><small>Experience</small></div></div></div></section> }
 
-function CapabilitiesPreview() { return <section className="capabilities-preview"><div className="shell"><SectionHeading eyebrow="Execution capability" title={<>Resourced for the<br/><em>work ahead.</em></>} copy="A practical foundation for construction, civil works and infrastructure execution."/><div className="pillar-grid">{capabilityPillars.map((pillar, index) => <article className="pillar" data-reveal style={{ transitionDelay: `${index * 70}ms` }} key={pillar.number}><span>{pillar.number}</span><h3>{pillar.title}</h3><p>{pillar.copy}</p></article>)}</div><div className="resource-bar" data-reveal><div><span className="eyebrow"><i></i>People & equipment</span><h3>150+ employees</h3></div><p>Extensive project-ready equipment and machinery supporting field execution.</p><Button to="/capabilities" variant="ghost">Capabilities</Button></div></div></section> }
-
-const regionalCities = [
-  ['Amritsar', '19%', '42%'], ['Kapurthala', '36%', '51%'], ['Jalandhar', '51%', '49%'], ['Ludhiana', '57%', '65%'], ['Chandigarh', '72%', '82%'], ['Mohali', '66%', '88%'],
+const capabilityItems = [
+  ['Construction Capability', 'General, civil and building construction support.'],
+  ['Road & Infrastructure', 'Road, highway and civil infrastructure work capability.'],
+  ['Government Project Execution', 'Experience with PWD projects and government contracting requirements.'],
+  ['Engineering & Transportation', 'Engineering and transportation support for site execution.'],
+  ['Equipment & Machinery', 'Extensive project-ready equipment and machinery.'],
+  ['Maintenance & Repair', 'Maintenance and repair capability for constructed assets.'],
 ] as const
 
-function ReachSection() { return <section className="section reach"><div className="shell reach-grid"><div data-reveal><Eyebrow>Geographic presence</Eyebrow><h2>Present where<br/>Punjab <em>builds.</em></h2><p>Based in Ludhiana, BNS operates across all districts of Punjab, Chandigarh and Mohali.</p><Button to="/contact" variant="ghost">Discuss your project</Button></div><div className="regional-map" data-reveal><img src={publicAsset('/images/general/punjab-regional-map.png')} alt="Regional map of Punjab with BNS presence points in Amritsar, Kapurthala, Jalandhar, Ludhiana, Chandigarh and Mohali"/>{regionalCities.map(([city, left, top]) => <span className="regional-map__marker" style={{ left, top }} key={city}><i></i><b>{city}</b></span>)}<span className="image-disclaimer">Regional visual</span></div></div></section> }
+function CapabilitiesPreview() { return <section className="capabilities-preview" id="capabilities"><div className="shell"><SectionHeading eyebrow="Execution capability" title={<>Resourced for the<br/><em>work ahead.</em></>} copy="A practical foundation for construction, civil works and infrastructure execution."/><div className="pillar-grid">{capabilityPillars.map((pillar, index) => <article className="pillar" data-reveal style={{ transitionDelay: `${index * 70}ms` }} key={pillar.number}><span>{pillar.number}</span><h3>{pillar.title}</h3><p>{pillar.copy}</p></article>)}</div><div className="resource-bar" data-reveal><div><span className="eyebrow"><i></i>People & equipment</span><h3>150+ employees</h3></div><p>Extensive project-ready equipment and machinery supporting field execution.</p><Button to="/contact" variant="ghost">Discuss a requirement</Button></div><div className="capability-list capability-list--home">{capabilityItems.map(([title, copy], index) => <article data-reveal key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div><Icon name="check"/></article>)}</div></div></section> }
+
+const mapBounds = { west: 74.0, east: 77.0, north: 32.55, south: 29.55 }
+const regionalCities = [
+  { city: 'Amritsar', latitude: 31.6340, longitude: 74.8723, labelClass: 'label-left' },
+  { city: 'Kapurthala', latitude: 31.3801, longitude: 75.3810, labelClass: 'label-left' },
+  { city: 'Jalandhar', latitude: 31.3260, longitude: 75.5762, labelClass: 'label-right' },
+  { city: 'Ludhiana', latitude: 30.9010, longitude: 75.8573, labelClass: 'label-left' },
+  { city: 'Chandigarh', latitude: 30.7333, longitude: 76.7794, labelClass: 'label-right' },
+  { city: 'Mohali', latitude: 30.7046, longitude: 76.7179, labelClass: 'label-left' },
+] as const
+
+function mapPosition(latitude: number, longitude: number) {
+  const mapLeft = 19.9
+  const mapRight = 77.5
+  const mapTop = 4.9
+  const mapBottom = 95.7
+  return {
+    left: `${mapLeft + ((longitude - mapBounds.west) / (mapBounds.east - mapBounds.west)) * (mapRight - mapLeft)}%`,
+    top: `${mapTop + ((mapBounds.north - latitude) / (mapBounds.north - mapBounds.south)) * (mapBottom - mapTop)}%`,
+  }
+}
+
+function ReachSection() { return <section className="section reach"><div className="shell reach-grid"><div data-reveal><Eyebrow>Geographic presence</Eyebrow><h2>Present where<br/>Punjab <em>builds.</em></h2><p>Based in Ludhiana, BNS operates across all districts of Punjab, Chandigarh and Mohali.</p><Button to="/contact" variant="ghost">Discuss your project</Button></div><div className="regional-map" data-reveal><img src={publicAsset('/images/general/punjab-regional-map.png')} alt="Map of Punjab showing BNS presence in Amritsar, Kapurthala, Jalandhar, Ludhiana, Chandigarh and Mohali"/>{regionalCities.map(({ city, latitude, longitude, labelClass }) => <span className={`regional-map__marker ${labelClass}`} style={mapPosition(latitude, longitude)} key={city}><i></i><b>{city}</b></span>)}</div></div></section> }
 
 function ContactCta() { return <section className="contact-cta"><div className="contact-cta__grid"></div><div className="shell contact-cta__inner" data-reveal><div><Eyebrow>Start a conversation</Eyebrow><h2>Have a project<br/>in <em>mind?</em></h2></div><div><p>To learn more about our contracting services or to discuss a prospective development, contact BNS Works Contracts Private Limited directly at <strong><a href={`tel:+91${company.phone}`}>{company.phoneDisplay}</a></strong>.</p><Button to="/contact">Discuss your project</Button></div></div></section> }
 
-function Home() { usePageMeta('BNS Works Contracts Private Limited | General Construction', 'General construction, civil works and infrastructure execution across Punjab, Chandigarh and Mohali.'); useReveal(); return <PageFrame><Hero/><ScaleStrip/><OverviewSection/><CoreExpertise/><section className="section services-home"><div className="shell"><SectionHeading eyebrow="What we do" title={<>Practical capability<br/>across <em>construction.</em></>} copy="A complete general construction offering designed around real-world project requirements." action={<Button to="/services" variant="ghost">All services</Button>}/><ServicesGrid limit={5}/></div></section><GovernmentSection/><CapabilitiesPreview/><ReachSection/><ContactCta/></PageFrame> }
+function Home() { usePageMeta('BNS Works Contracts Private Limited | General Construction', 'General construction, civil works and infrastructure execution across Punjab, Chandigarh and Mohali.'); useReveal(); return <PageFrame><Hero/><ScaleStrip/><OverviewSection/><CoreExpertise/><section className="section services-home" id="services"><div className="shell"><SectionHeading eyebrow="What we do" title={<>Practical capability<br/>across <em>construction.</em></>} copy="The complete general construction offering, brought together here on the home page."/><ServicesGrid/></div></section><GovernmentSection/><CapabilitiesPreview/><ReachSection/><ContactCta/></PageFrame> }
 
 function InnerHero({ number, eyebrow, title, copy }: { number: string; eyebrow: string; title: ReactNode; copy: string }) { return <section className="inner-hero"><div className="inner-hero__lines"></div><div className="shell inner-hero__content"><span className="page-number">{number}</span><div data-reveal><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{copy}</p></div></div></section> }
 
@@ -176,7 +206,7 @@ function About() { usePageMeta('About BNS Works | General Construction', 'Learn 
 
 function Services() { usePageMeta('Construction Services | BNS Works', 'Explore BNS Works construction, civil works, infrastructure and government contracting service capabilities.'); useReveal(); return <PageFrame><InnerHero number="02" eyebrow="Services" title={<>The capabilities<br/>to <em>get moving.</em></>} copy="A focused collection of construction and infrastructure services designed for public and private requirements."/><section className="section services-page"><div className="shell"><ServicesGrid/></div></section><section className="dark-statement"><div className="shell"><div><Eyebrow>One integrated partner</Eyebrow><h2>From civil work to<br/><em>infrastructure delivery.</em></h2></div><p>BNS brings a practical general construction perspective to the varied needs of construction, roads, government work, engineering and maintenance.</p></div></section><ContactCta/></PageFrame> }
 
-function Capabilities() { usePageMeta('Capabilities | BNS Works', 'BNS Works construction capability, workforce and equipment readiness for civil and infrastructure work.'); useReveal(); const capItems = [['Construction Capability', 'General construction, civil construction and building construction support.'], ['Road & Infrastructure', 'Road, highway and civil infrastructure work capability.'], ['Government Project Execution', 'Experience with PWD projects and government contracting requirements.'], ['Engineering & Transportation', 'Engineering and transportation support for site execution.'], ['Equipment & Machinery', 'Extensive project-ready equipment and machinery supporting field execution.'], ['Maintenance & Repair', 'Maintenance and repair capability for construction requirements.']]; return <PageFrame><InnerHero number="03" eyebrow="Capabilities" title={<>Ready to work<br/>at <em>ground level.</em></>} copy="People, equipment and practical construction capability aligned to project execution."/><section className="section capability-page"><div className="shell"><div className="capability-feature" data-reveal><div><span className="eyebrow"><i></i>Workforce</span><strong>150+</strong><p>Employees</p></div><div className="capability-feature__image"><img src={publicAsset('/images/general/indian-construction-workforce.png')} alt="AI-generated visual of Indian construction workers and engineers on site"/><span className="image-disclaimer">AI-generated visual</span></div><div><span className="eyebrow"><i></i>Equipment</span><h3>Extensive<br/>project-ready resources</h3><p>Construction equipment and machinery supporting field execution.</p></div></div><div className="capability-list">{capItems.map(([title, copy], index) => <article data-reveal key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div><Icon name="arrow"/></article>)}</div></div></section><ContactCta/></PageFrame> }
+function Capabilities() { usePageMeta('Capabilities | BNS Works', 'BNS Works construction capability, workforce and equipment readiness for civil and infrastructure work.'); useReveal(); return <PageFrame><InnerHero number="03" eyebrow="Capabilities" title={<>Ready to work<br/>at <em>ground level.</em></>} copy="People, equipment and practical construction capability aligned to project execution."/><section className="section capability-page"><div className="shell"><div className="capability-feature" data-reveal><div><span className="eyebrow"><i></i>Workforce</span><strong>150+</strong><p>Employees</p></div><div className="capability-feature__image"><img src={publicAsset('/images/general/indian-construction-workforce.png')} alt="Construction workers and engineers on site"/></div><div><span className="eyebrow"><i></i>Equipment</span><h3>Extensive<br/>project-ready resources</h3><p>Construction equipment and machinery supporting field execution.</p></div></div><div className="capability-list">{capabilityItems.map(([title, copy], index) => <article data-reveal key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div><Icon name="arrow"/></article>)}</div></div></section><ContactCta/></PageFrame> }
 
 function Contact() {
   usePageMeta('Contact BNS Works', 'Contact BNS Works Contracts Private Limited in Ludhiana, Punjab for construction and infrastructure requirements.')
@@ -202,4 +232,4 @@ function Contact() {
 
 function NotFound() { usePageMeta('Page not found | BNS Works', 'BNS Works Contracts Private Limited.'); useReveal(); return <PageFrame><section className="not-found"><div className="shell"><span>404</span><h1>That page is not<br/><em>on the drawing.</em></h1><Button to="/">Return home</Button></div></section></PageFrame> }
 
-export default function SiteApp() { const pathname = usePathname(); const path = pathname.startsWith(publicBasePath) ? pathname.slice(publicBasePath.length) || '/' : pathname; if (path === '/') return <Home/>; if (path === '/about') return <About/>; if (path === '/services') return <Services/>; if (path === '/capabilities') return <Capabilities/>; if (path === '/contact') return <Contact/>; return <NotFound/> }
+export default function SiteApp() { const pathname = usePathname(); const rawPath = pathname.startsWith(publicBasePath) ? pathname.slice(publicBasePath.length) || '/' : pathname; const path = rawPath.replace(/\/+$/, '') || '/'; if (path === '/') return <Home/>; if (path === '/about') return <About/>; if (path === '/services') return <Services/>; if (path === '/capabilities') return <Capabilities/>; if (path === '/contact') return <Contact/>; return <NotFound/> }
