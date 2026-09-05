@@ -164,6 +164,11 @@ p { color: var(--muted); font-size: 15px; line-height: 1.75; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }.hero-scene { transform: none !important; }.project-card:hover .art-panel { transform: none; } }
 
+/* Six evenly balanced proof points, including completed projects. */
+.scale-grid { grid-template-columns: 1.2fr 1.2fr repeat(4, 1fr); }
+@media (max-width: 1000px) { .scale-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .scale-grid { grid-template-columns: repeat(2, 1fr); }.scale-item:last-child { grid-column: auto; } }
+
 /* AI-generated construction imagery and capability presentation */
 .hero-image { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .hero-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, rgba(3, 16, 30, .92) 0%, rgba(3, 16, 30, .74) 37%, rgba(3, 16, 30, .24) 74%, rgba(3, 16, 30, .34) 100%); }

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import '../src/styles.css'
 
 export const metadata: Metadata = {
-  title: 'BNS Works Contracts Private Limited | General Construction',
+  title: 'BNS Works Contracts Private Limited',
   description: 'BNS Works Contracts Private Limited is a general construction company serving Punjab, Chandigarh and Mohali.',
   openGraph: {
     title: 'BNS Works Contracts Private Limited',

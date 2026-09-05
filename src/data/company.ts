@@ -10,6 +10,7 @@ export const company = {
 }
 
 export const scaleFacts = [
+  { value: '100+', label: 'Completed Projects', detail: 'Proven delivery experience' },
   { value: '150+', label: 'Employees', detail: 'Project-ready workforce' },
   { value: 'Punjab', label: 'All Districts', detail: 'Regional reach' },
   { value: 'Chandigarh', label: 'Presence', detail: 'Regional reach' },
